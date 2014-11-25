@@ -59,7 +59,7 @@ logs.each { LogInfo logInfo ->
 }
 
 new FileOutputStream(outputFile).withStream { stream ->
-    stream << "Total: ${logSummaries.size()} different stacktraces\n"
+    stream << "Total: ${logSummaries.size()} different stacktraces, ${logSummaries.entrySet().sum {it.value.count}} reports\n"
     stream << Collections.nCopies(140, '=').join()
     stream << '\n\n\n'
     logSummaries.entrySet().sort { it.value.count }.reverse().each { entry ->
