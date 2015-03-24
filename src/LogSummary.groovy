@@ -3,6 +3,7 @@ class LogSummary {
     Set<String> devices = [] as LinkedHashSet
     Set<String> osVersions = [] as LinkedHashSet
     Set<String> messages = [] as LinkedHashSet
+    Set<String> appVersions = [] as LinkedHashSet
     LogInfo sample
 
     LogSummary(LogInfo sample) {
@@ -14,6 +15,7 @@ class LogSummary {
         count++
         devices << logInfo.device
         osVersions << logInfo.osVersion
+        appVersions << logInfo.appVersion
 
         def message = logInfo.parsedStackTrace?.exception?.message
         if (message) {
@@ -26,6 +28,7 @@ class LogSummary {
         return count + ' times found \n' +
                 'on ' + devices.join(', ') + '\n' +
                 'with OS ' + osVersions.join(', ') + '\n' +
+                (appVersions.size() > 1 ? ('with App ' + appVersions.join(', ') + '\n') : '') +
                 (!messages.empty ? ('with messages ' + messages.join(', ') + '\n') : '') +
                 sample.fullStacktrace
     }

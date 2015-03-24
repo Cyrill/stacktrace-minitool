@@ -4,7 +4,7 @@ import java.util.zip.ZipInputStream
 def sourceDir = '../archives'
 def destDir = '../out/logs'
 def outputFile = '../out/result'
-def appVersion = ['67.8']
+def appVersion = ['68.8.1']
 
 def archives = []
 new File(sourceDir).eachFileRecurse(FileType.FILES) { file ->
