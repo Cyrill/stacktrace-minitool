@@ -3,8 +3,10 @@ import java.util.zip.ZipInputStream
 
 def sourceDir = '../archives'
 def destDir = '../out/logs'
-def outputFile = '../out/result'
+def outputFile = '../out/result.txt'
 def appVersion = ['68.8.1']
+int analyseDepth = 5
+def foundVersions = [] as TreeSet
 
 def archives = []
 new File(sourceDir).eachFileRecurse(FileType.FILES) { file ->
@@ -39,7 +41,8 @@ archives.each { archive ->
 def logs = []
 new File(destDir).eachFile { file ->
     try {
-        LogInfo info = new LogInfo(file.text)
+        LogInfo info = new LogInfo(file.text, analyseDepth)
+        foundVersions << info.appVersion
         if (appVersion.empty || appVersion.contains(info.appVersion)) {
             logs << info
         }
@@ -60,6 +63,12 @@ logs.each { LogInfo logInfo ->
 
 new FileOutputStream(outputFile).withStream { stream ->
     stream << "Total: ${logSummaries.size()} different stacktraces, ${logSummaries.entrySet().sum {it.value.count}} reports\n"
+    stream << "Analyse depth: $analyseDepth\n"
+    if (appVersion.empty) {
+        stream << "Found app versions ${foundVersions.join(', ')}\n"
+    } else {
+        stream << "Requested app version: ${appVersion.join(', ')}\n"
+    }
     stream << Collections.nCopies(140, '=').join()
     stream << '\n\n\n'
     logSummaries.entrySet().sort { it.value.count }.reverse().each { entry ->

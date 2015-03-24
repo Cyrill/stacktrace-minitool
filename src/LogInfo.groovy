@@ -10,8 +10,10 @@ public class LogInfo {
     String fullStacktrace
     String comparableCusedBy
     NTrace parsedStackTrace
+    final int analyseDepth
 
-    LogInfo(String fullStacktrace) {
+    LogInfo(String fullStacktrace, int depth) {
+        analyseDepth = depth
         parse(fullStacktrace)
     }
 
@@ -36,7 +38,13 @@ public class LogInfo {
                 trace = trace.getNested()
             }
             parsedStackTrace = trace
-            comparableCusedBy = trace.getFrames()[0]
+            comparableCusedBy=''
+            analyseDepth.times { idx ->
+                if (trace.getFrames()[idx]) {
+                    comparableCusedBy += trace.getFrames()[idx]
+                }
+            }
+
         }
     }
 
