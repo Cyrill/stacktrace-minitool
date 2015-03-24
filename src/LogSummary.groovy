@@ -1,9 +1,9 @@
 class LogSummary {
     int count
-    Set<String> devices = [] as LinkedHashSet
-    Set<String> osVersions = [] as LinkedHashSet
+    Set<String> devices = [] as TreeSet
+    Set<String> osVersions = [] as TreeSet
     Set<String> messages = [] as LinkedHashSet
-    Set<String> appVersions = [] as LinkedHashSet
+    Set<String> appVersions = [] as TreeSet
     LogInfo sample
 
     LogSummary(LogInfo sample) {
@@ -27,7 +27,7 @@ class LogSummary {
     public String toString() {
         return count + ' times found \n' +
                 'on ' + devices.join(', ') + '\n' +
-                'with OS ' + osVersions.join(', ') + '\n' +
+                'with OS ' + osVersions.descendingSet().join(', ') + '\n' +
                 (appVersions.size() > 1 ? ('with App ' + appVersions.join(', ') + '\n') : '') +
                 (!messages.empty ? ('with messages ' + messages.join(', ') + '\n') : '') +
                 sample.fullStacktrace
