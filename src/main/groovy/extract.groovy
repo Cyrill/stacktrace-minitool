@@ -1,10 +1,11 @@
 import groovy.io.FileType
 import java.util.zip.ZipInputStream
 
-def sourceDir = '../archives'
-def destDir = '../out/logs'
-def outputFile = '../out/result.txt'
-def appVersion = ['68.8.1']
+def sourceDir = 'archives'
+def destDir = 'out/logs'
+def outputFile = 'out/result.txt'
+def appVersion = ['70.8']
+//def appVersion = []
 int analyseDepth = 5
 def foundVersions = [] as TreeSet
 
@@ -40,14 +41,17 @@ archives.each { archive ->
 
 def logs = []
 new File(destDir).eachFile { file ->
+    def text = null
     try {
-        LogInfo info = new LogInfo(file.text, analyseDepth)
+        text = file.text
+        LogInfo info = new LogInfo(text, analyseDepth)
         foundVersions << info.appVersion
         if (appVersion.empty || appVersion.contains(info.appVersion)) {
             logs << info
         }
     } catch (e) {
         e.printStackTrace()
+        println "Couldn't parse $text"
     }
 
 }

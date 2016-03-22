@@ -1,0 +1,15 @@
+apply plugin: 'groovy'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile localGroovy()
+    compile fileTree(dir: 'libs', include: '*.jar')
+}
+task runScript (dependsOn: 'classes', type: JavaExec) {
+    main = 'extract'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
